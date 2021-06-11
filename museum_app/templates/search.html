@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} Госкаталог {% endblock %}
+
+{% block content %}
+    <h2>Поиск по каталогу</h2>
+    <div id="simple_search" class="search-block">
+        <div class="container">
+          <form action="{{prefix}}/results" target="_blank">
+            <div class="row">
+                <select id="country" name="country" placeholder="Anycity">
+                    <option value="-">-</option>
+                    {% for country in data["geo"] %}
+                        <option value="{{ country }}">{{ country }}</option>
+                    {% endfor %}
+                </select>
+                <select id="location" name="location" placeholder="Anycity"></select>
+            </div>
+          </form>
+        </div>
+    </div>
+{% endblock %}
+
+
+<script>
+    jQuery(function($) {
+        var locations = {{ data['geo']|tojson }}
+        var $locations = $('#location');
+        $('#country').change(function () {
+            var country = $(this).val(), lcns = locations[country] || [];
+
+            var html = $.map(lcns, function(lcn){
+                return '<option value="' + lcn + '">' + lcn + '</option>'
+            }).join('');
+            $locations.html('<option value="-">-</option>' + html)
+        });
+    });
+</script>

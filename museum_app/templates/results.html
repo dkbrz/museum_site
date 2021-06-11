@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %} Результаты поиска {% endblock %}
+{% block content %}
+    <h2>Результаты поиска</h2>
+    <input type="checkbox" id="expand-toggle">
+    <label for="expand-toggle" id="expand-btn">Сетка / Список</label>
+	<div class="pagination-meta-block">
+        {{ pagination.info }}
+        {{ pagination.links }}
+    </div>
+    <div class="results">
+        {% for exhibit in result %}
+            <div class="exhibit-item">
+				<div class="photo-wrapper">
+					<div class="inner-photo-wrapper">
+                        {% if exhibit.images %}
+                        <img class="exhibit-photo" src="http://goskatalog.ru/muzfo-imaginator/rest/images/original/{{exhibit.images[0].image_id}}">
+                        {% else %}
+                        <img class="exhibit-photo" src="static/placeholder.jpg">
+                        {% endif %}
+                    </div>
+				</div>
+				<div class="exhibit-meta">
+					<div class="exhibit-dates">
+						{% if exhibit.start_year %}
+						{{ exhibit.start_year }}
+						{% endif %}
+						{% if exhibit.finish_year %}
+						{{ exhibit.finish_year }}
+						{% endif %}
+					</div>
+					<div class="exhibit-author">{{ exhibit.author_raw.text }}</div>
+					<div class="exhibit-name">{{ exhibit.name }}</div>
+<!--					<div class="exhibit-dates">{{ exhibit.time_raw.text }}</div>-->
+				</div>
+
+				<div class="exhibit-description" itemprop="description">
+					{{ exhibit.description_raw }}
+				</div>
+			</div>
+        {% endfor %}
+    </div>
+	<div class="pagination-meta-block">
+        {{ pagination.links }}
+    </div>
+
+
+{% endblock %}

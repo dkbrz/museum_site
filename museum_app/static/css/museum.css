@@ -1,0 +1,94 @@
+div.results div{
+	display: inline-block;
+	width: 100%;
+}
+
+#expand-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 5px 11px;
+  background-color: #FFC107;
+  border: 1px solid;
+  border-radius: 3px;
+}
+
+#expand-toggle:checked ~ #expand-btn {
+  background-color: #FF5722;
+}
+
+#expand-toggle {
+  display: none;
+}
+
+.exhibit-item {
+	min-width: 300px;
+	padding: 1%;
+	max-width: 24%;
+	vertical-align: top;
+}
+
+.exhibit-meta,
+.exhibit-description {
+	padding: 2%;
+	min-width: 300px;
+}
+
+#expand-toggle:checked ~ * .exhibit-item {
+	max-width: 100% !important;
+}
+
+#expand-toggle:checked ~ * .photo-wrapper {
+	max-width: 15% !important;
+}
+
+#expand-toggle:checked ~ * .exhibit-meta {
+	max-width: 25%;
+	padding: 2%;
+	vertical-align: top;
+}
+
+#expand-toggle:checked ~ * .exhibit-description {
+	max-width: 45%;
+	padding: 2%;
+	vertical-align: top;
+}
+
+img.exhibit-photo{
+	max-width: 100%;
+	max-height: 300px;
+}
+
+.inner-photo-wrapper {
+	/*margin: 0 auto;*/
+	/*position: relative;*/
+	/*display: block;*/
+	height: 300px;
+}
+
+.exhibit-author{
+	color: green;
+}
+
+.exhibit-name {
+	color: #FF5722;
+}
+
+.exhibit-dates {
+	color: blue;
+}
+
+.pagination * a {
+	color: gray;
+}
+
+.pagination .active .page-link{
+	background-color: #FFC107;
+	border-color: black;
+	color: black;
+}
+
+.pagination-page-info {
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+

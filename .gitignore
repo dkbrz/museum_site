@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/museum_app/config.py
