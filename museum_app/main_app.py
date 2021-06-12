@@ -4,7 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from museum_app.config import DB
 from museum_app.db_queries import (
-    main_search
+    main_search,
+    get_search_params
 )
 
 PER_PAGE = 100
@@ -36,7 +37,8 @@ def index():
 
 @app.route("/search")
 def search():
-    return render_template("search.html", data={"geo": {}})
+    data = get_search_params(session)
+    return render_template("search.html", data=data)
 
 
 @app.route("/results")

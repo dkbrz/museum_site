@@ -1,38 +1,123 @@
+<head>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+</head>
+
 {% extends 'base.html' %}
 
 {% block title %} Госкаталог {% endblock %}
 
 {% block content %}
-    <h2>Поиск по каталогу</h2>
-    <div id="simple_search" class="search-block">
+    <div id="search" class="search">
         <div class="container">
+            <h2>Поиск по каталогу</h2>
           <form action="{{prefix}}/results" target="_blank">
-            <div class="row">
-                <select id="country" name="country" placeholder="Anycity">
-                    <option value="-">-</option>
-                    {% for country in data["geo"] %}
-                        <option value="{{ country }}">{{ country }}</option>
-                    {% endfor %}
-                </select>
-                <select id="location" name="location" placeholder="Anycity"></select>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="typology">Категория</label>
+                    <select id="typology" name="typology" class="form-control">
+                       <option>-</option>
+                        {% for item in data["typology"] %}
+                            <option value="{{ item.id }}"> {{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="typology-help" class="form-text text-muted">Выберите категорию экспонатов (прочерк - все)</small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="author">Автор</label>
+                    <input id="author" name="author" class="form-control" list="author-list">
+                    <datalist id="author-list">
+                        {% for item in data["authors"] %}
+                            <option value="{{ item.order_name }}"> {{ item.order_name }}</option>
+                        {% endfor %}
+                    </datalist>
+                    <small id="author-help" class="form-text text-muted">Начните вводить фамилию и выберите из вариантов</small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="century">Век</label>
+                    <select id="century" name="" onchange="setYear(this.value);" class="form-control">
+                       <option>-</option>
+                        {% for n in range(21, -22, -1) %}
+                            {% if n != 0 %}
+                                <option value="{{ n }}"> {{ n }} век </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <small id="century-help" class="form-text text-muted">Выберите век, года выберутся автоматически</small>
+               </div>
+                <div class="form-group col-md-4">
+                    <label for="min-year">С</label>
+                    <input type="number" id="min-year" name="min_year" class="form-control">
+                    <small id="min-year-help" class="form-text text-muted">Уточните года (прочерк слева - не позднее)</small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="max-year">По</label>
+                    <input type="number" id="max-year" name="max_year" class="form-control">
+                    <small id="max-year-help" class="form-text text-muted">Уточните года (прочерк справа - после)</small>
+                </div>
+            </div>
+              <h5 class="form-label">География происхождения</h5>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="country">Страна</label>
+                    <select name="country" id="country" class="form-control" onchange="geoUpdate(this.value)">
+                        <option value="" selected="selected">-</option>
+                        {% for item in data["geo_obj"] %}
+                            <option value="{{ item }}"> {{ item }}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="country-help" class="form-text text-muted">Выберите страну (СССР, Российская империя отдельно, если нет более подробного указания) </small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="region">Регион</label>
+                    <select name="region" id="region" class="form-control">
+                        <option value="" selected="selected">-</option>
+                    </select>
+                    <small id="region-help" class="form-text text-muted">Выберите регион, прочерк - любой</small>
+                </div>
+            </div>
+            <h5 class="form-label">Текущее место хранения</h5>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="region-now">Регион</label>
+                    <select name="region_now" id="region-now" class="form-control" onchange="geoUpdate(this.value)">
+                        <option value="" selected="selected">-</option>
+                        {% for item in data["geo_obj"] %}
+                            <option value="{{ item }}"> {{ item }}</option>
+                        {% endfor %}
+                    </select>
+                    <small id="region-now-help" class="form-text text-muted">Выберите регион музея </small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="district-now">Район</label>
+                    <select name="district_now" id="district-now" class="form-control">
+                        <option value="" selected="selected">-</option>
+                    </select>
+                    <small id="district-now-help" class="form-text text-muted">Выберите район, прочерк - любой</small>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="museum-now">Музей</label>
+                    <select name="museum_now" id="museum-now" class="form-control">
+                        <option value="" selected="selected">-</option>
+                    </select>
+                    <small id="museum-now-help" class="form-text text-muted">Выберите музей, прочерк - любой</small>
+                </div>
+            </div>
+<!--            <div class="form-row">-->
+<!--                <div class="form-group col-md-4">-->
+<!--                    <div class="form-check">-->
+<!--                      <input class="form-check-input" type="checkbox" value="1" id="image_only" name="image_only" checked>-->
+<!--                      <label class="form-check-label" for="image_only">-->
+<!--                        Только с фото-->
+<!--                      </label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-row">
+                <input id='submit' class="dataform-button form-control" style="width: 100%" type="submit" name="submit" value="Поиск">
             </div>
           </form>
         </div>
     </div>
 {% endblock %}
-
-
-<script>
-    jQuery(function($) {
-        var locations = {{ data['geo']|tojson }}
-        var $locations = $('#location');
-        $('#country').change(function () {
-            var country = $(this).val(), lcns = locations[country] || [];
-
-            var html = $.map(lcns, function(lcn){
-                return '<option value="' + lcn + '">' + lcn + '</option>'
-            }).join('');
-            $locations.html('<option value="-">-</option>' + html)
-        });
-    });
-</script>

@@ -7,13 +7,13 @@ div.results div{
   display: inline-block;
   margin-top: 12px;
   padding: 5px 11px;
-  background-color: #FFC107;
+  background-color: #FBC02D;
   border: 1px solid;
   border-radius: 3px;
 }
 
 #expand-toggle:checked ~ #expand-btn {
-  background-color: #FF5722;
+  background-color: #FFA000;
 }
 
 #expand-toggle {
@@ -25,56 +25,90 @@ div.results div{
 	padding: 1%;
 	max-width: 24%;
 	vertical-align: top;
+	/*border: 2px black solid;*/
 }
 
 .exhibit-meta,
 .exhibit-description {
-	padding: 2%;
+	padding: 1%;
 	min-width: 300px;
+}
+
+.exhibit-meta {
+	max-width: 25%;
+}
+
+.exhibit-description {
+	max-width: 45%;
+}
+
+.photo-wrapper {
+	vertical-align: top;
+}
+
+.exhibit-item div.photo {
+	margin: auto;
 }
 
 #expand-toggle:checked ~ * .exhibit-item {
 	max-width: 100% !important;
+	/*display: block;*/
 }
 
 #expand-toggle:checked ~ * .photo-wrapper {
 	max-width: 15% !important;
 }
 
-#expand-toggle:checked ~ * .exhibit-meta {
-	max-width: 25%;
-	padding: 2%;
+#expand-toggle:checked ~ * .exhibit-meta,
+#expand-toggle:checked ~ * .exhibit-description {
 	vertical-align: top;
 }
 
-#expand-toggle:checked ~ * .exhibit-description {
-	max-width: 45%;
-	padding: 2%;
+#expand-toggle:checked ~ * .exhibit-meta,
+#expand-toggle:checked ~ * .exhibit-description{
 	vertical-align: top;
+	display: inline-block;
+}
+
+#expand-toggle:not(checked) ~ * .exhibit-meta,
+#expand-toggle:not(checked) ~ * .exhibit-description{
+	display: none;
 }
 
 img.exhibit-photo{
 	max-width: 100%;
-	max-height: 300px;
+	/*max-height: 300px;*/
 }
 
 .inner-photo-wrapper {
-	/*margin: 0 auto;*/
-	/*position: relative;*/
+	margin: 0 auto;
+	position: relative;
 	/*display: block;*/
-	height: 300px;
+	/*height: 300px;*/
 }
 
 .exhibit-author{
-	color: green;
+	color: #388E3C;
 }
 
 .exhibit-name {
-	color: #FF5722;
+	color: #d32f2f;
 }
 
-.exhibit-dates {
-	color: blue;
+.exhibit-museum {
+	color: #303F9F;
+}
+
+/*.exhibit-dates {*/
+/*	color: blue;*/
+/*}*/
+
+.exhibit-raw {
+	color: #9E9E9E;
+}
+
+.exhibit-raw-second {
+	color: #607D8B;
 }
 
 .pagination * a {
@@ -82,7 +116,7 @@ img.exhibit-photo{
 }
 
 .pagination .active .page-link{
-	background-color: #FFC107;
+	background-color: #FBC02D;
 	border-color: black;
 	color: black;
 }
@@ -92,3 +126,22 @@ img.exhibit-photo{
 	margin-top: 20px;
 }
 
+.exhibit-author p {
+	margin: 0;
+}
+
+.exhibit-meta hr,
+.exhibit-description hr{
+	margin: 10px auto;
+}
+
+.form-label {
+	color: #9E9E9E;
+}
+
+#submit {
+	background-color: #FBC02D !important;
+	margin-top: 30px;
+	border: 2px black solid;
+	color: black;
+}

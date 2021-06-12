@@ -13,30 +13,88 @@
             <div class="exhibit-item">
 				<div class="photo-wrapper">
 					<div class="inner-photo-wrapper">
-                        {% if exhibit.images %}
-                        <img class="exhibit-photo" src="http://goskatalog.ru/muzfo-imaginator/rest/images/original/{{exhibit.images[0].image_id}}">
-                        {% else %}
-                        <img class="exhibit-photo" src="static/placeholder.jpg">
-                        {% endif %}
-                    </div>
-				</div>
-				<div class="exhibit-meta">
-					<div class="exhibit-dates">
-						{% if exhibit.start_year %}
-						{{ exhibit.start_year }}
-						{% endif %}
-						{% if exhibit.finish_year %}
-						{{ exhibit.finish_year }}
-						{% endif %}
+						<a href="https://goskatalog.ru/portal/#/collections?id={{ exhibit.id }}">
+							{% if exhibit.images %}
+							<img class="exhibit-photo" src="http://goskatalog.ru/muzfo-imaginator/rest/images/public/350/{{exhibit.images[0].image_id}}/{{exhibit.images[0].image_id}}.jpg" alt="изображение недоступно">
+							{% else %}
+							<img class="exhibit-photo" src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg">
+							{% endif %}
+						</a>
 					</div>
-					<div class="exhibit-author">{{ exhibit.author_raw.text }}</div>
-					<div class="exhibit-name">{{ exhibit.name }}</div>
-<!--					<div class="exhibit-dates">{{ exhibit.time_raw.text }}</div>-->
 				</div>
 
-				<div class="exhibit-description" itemprop="description">
-					{{ exhibit.description_raw }}
+				<div class="exhibit-meta">
+					{% if exhibit.start_year or exhibit.finish_year %}
+						<div class="exhibit-new">
+							{% if exhibit.start_year %}
+							{{ exhibit.start_year }}
+							{% endif %}
+							{% if exhibit.finish_year and exhibit.start_year != exhibit.finish_year %}
+							-
+							{{ exhibit.finish_year }}
+							{% endif %}
+						</div>
+					{% endif %}
+					{% if exhibit.time_raw.text %}
+						<div class="exhibit-raw">
+							{{ exhibit.time_raw.text }}
+						</div>
+					{% endif %}
+					{% if exhibit.authors%}
+						<hr>
+						<div class="exhibit-author">
+							{% for author in exhibit.authors %}
+								{% if author.order_name%}
+									<p> {{ author.order_name }} </p>
+								{% elif author.name_en %}
+									<p> {{ author.name_en }} </p>
+								{% else %}
+									<p> {{ author.qid }} </p>
+								{% endif %}
+							{% endfor %}
+						</div>
+						{% if exhibit.author_raw.text %}
+							<div class="exhibit-raw">
+								{{ exhibit.author_raw.text }}
+							</div>
+						{% endif %}
+					{% endif %}
+					{% if exhibit.geo_obj.name_0 %}
+						<hr>
+						<div class="exhibit-geo">
+							{% if exhibit.geo_obj.name_0 %}
+								{{ exhibit.geo_obj.name_0 }}
+							{% endif %}
+						</div>
+					{% endif %}
+					{% if exhibit.geo_obj.name_1 %}
+						<div class="exhibit-geo">
+							{% if exhibit.geo_obj.name_1 %}
+								{{ exhibit.geo_obj.name_1 }}
+							{% endif %}
+						</div>
+					{% endif %}
+					{% if exhibit.production_raw.text %}
+						<div class="exhibit-raw">
+							{{ exhibit.production_raw.text }}
+						</div>
+					{% endif %}
+					{% if exhibit.production_raw.text %}
+						<div class="exhibit-raw-second">
+							{{ exhibit.production_raw.text }}
+						</div>
+					{% endif %}
 				</div>
+				<div class="exhibit-description">
+					<div class="exhibit-museum">{{ exhibit.museum.name }}</div>
+					<hr>
+					<div class="exhibit-name">{{ exhibit.name }}</div>
+					<hr>
+					<div class="exhibit-description-text" itemprop="description">
+						{{ exhibit.description_raw.text }}
+					</div>
+				</div>
+				<hr>
 			</div>
         {% endfor %}
     </div>

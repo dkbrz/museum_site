@@ -75,6 +75,9 @@ class AuthorWikidata(Base):
 class GeoWiki(Base):
     __tablename__ = "geo_wiki"
     geo_id = Column("geo_id", Integer, primary_key=True)
+    name_0 = Column("name_0", Integer)
+    name_1 = Column("name_1", Integer)
+    ru = Column("ru", Integer)
 
 
 class LinkAuthors(Base):
@@ -142,21 +145,21 @@ class Collection(Base):
     # technology_raw = relationship('TechnologyRaw', uselist=False)
     #
     # description_str = Column('id', Integer, ForeignKey('description_raw.id'))
-    # description_raw = relationship('DescriptionRaw', uselist=False, primaryjoin="DescriptionRaw.id==Collection.id")
+    description_raw = relationship('DescriptionRaw', uselist=False, primaryjoin="DescriptionRaw.id==Collection.id")
     #
-    # production_str = Column('production_str', Integer, ForeignKey('production_raw.id'))
-    # production_raw = relationship('ProductionRaw', uselist=False)
+    production_str = Column('production_str', Integer, ForeignKey('production_raw.id'))
+    production_raw = relationship('ProductionRaw', uselist=False)
     #
     # find_str = Column('find_str', Integer, ForeignKey('find_raw.id'))
     # find_raw = relationship('FindRaw', uselist=False)
     #
-    # geo_id = Column('geo_id', Integer, ForeignKey('geo_wiki.geo_id'))
-    # museum_copuk = Column(Integer, ForeignKey('museums.museum_copuk'))
-    # typology_id = Column('typology', Integer, ForeignKey('typology.id'))
+    geo_id = Column('geo_id', Integer, ForeignKey('geo_wiki.geo_id'))
+    museum_copuk = Column(Integer, ForeignKey('museums.museum_copuk'))
+    typology_id = Column('typology', Integer, ForeignKey('typology.id'))
     #
-    # museum = relationship("Museums", uselist=False)
-    # typology = relationship('Typology', uselist=False)
-    # geo = relationship('GeoWiki')
+    museum = relationship("Museums", uselist=False)
+    typology = relationship('Typology', uselist=False)
+    geo_obj = relationship('GeoWiki')
 
 
 class AuthorName(Base):
@@ -165,6 +168,8 @@ class AuthorName(Base):
     name_en = Column("name_en", String)
     name_ru = Column("name_ru", String)
     qid = Column("qid", String)
+    n = Column("n", Integer)
+    order_name = Column("order_name", String)
 
 
 class TechnologyName(Base):
