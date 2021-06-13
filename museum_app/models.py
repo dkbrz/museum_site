@@ -93,6 +93,7 @@ class LinkImage(Base):
 
     id = Column("id", Integer, ForeignKey("collection.id"))
     image_id = Column("image_id", Integer, primary_key=True)
+    exhibit = relationship("Collection", back_populates="images")
 
 
 class LinkTech(Base):
@@ -108,6 +109,10 @@ class Museums(Base):
     __tablename__ = "museums"
     museum_copuk = Column("museum_copuk", Integer, primary_key=True)
     name = Column("name", String)
+    nl_name_1 = Column("nl_name_1", String)
+    nl_name_2 = Column("nl_name_2", String)
+    lon = Column("lon", Float)
+    lat = Column("lat", Float)
 
 
 class Typology(Base):
@@ -134,25 +139,24 @@ class Collection(Base):
     authors = relationship("AuthorName", secondary='authors', lazy='dynamic')
     technologies = relationship("TechnologyName", secondary='technologies', lazy='dynamic')
     images = relationship("LinkImage")
-    #
+
     author_str = Column('author_str', Integer, ForeignKey('author_raw.id'))
     author_raw = relationship('AuthorRaw', uselist=False)
 
     time_str = Column('time_str', Integer, ForeignKey('time_raw.id'))
     time_raw = relationship('TimeRaw', uselist=False)
 
-    # technology_str = Column('technology_str', Integer, ForeignKey('technology_raw.id'))
-    # technology_raw = relationship('TechnologyRaw', uselist=False)
-    #
-    # description_str = Column('id', Integer, ForeignKey('description_raw.id'))
+    technology_str = Column('technology_str', Integer, ForeignKey('technology_raw.id'))
+    technology_raw = relationship('TechnologyRaw', uselist=False)
+
     description_raw = relationship('DescriptionRaw', uselist=False, primaryjoin="DescriptionRaw.id==Collection.id")
-    #
+
     production_str = Column('production_str', Integer, ForeignKey('production_raw.id'))
     production_raw = relationship('ProductionRaw', uselist=False)
-    #
+
     # find_str = Column('find_str', Integer, ForeignKey('find_raw.id'))
     # find_raw = relationship('FindRaw', uselist=False)
-    #
+
     geo_id = Column('geo_id', Integer, ForeignKey('geo_wiki.geo_id'))
     museum_copuk = Column(Integer, ForeignKey('museums.museum_copuk'))
     typology_id = Column('typology', Integer, ForeignKey('typology.id'))
@@ -182,9 +186,16 @@ class TechnologyName(Base):
 
 
 class FacesPainting(Base):
-    __tablename__ = "faces_paiting"
+    __tablename__ = "faces_painting"
 
     face_id = Column("face_id", Integer, primary_key=True)
-    image_id = Column("image_id", Integer)
-    obj_id = Column("obj_id", Integer, ForeignKey("collection.id"))
-    collection_obj = relationship("Collection", uselist=False)
+    image_id = Column("image_id", Integer, ForeignKey("image_link.image_id"))
+    image = relationship("LinkImage", primaryjoin="LinkImage.image_id==FacesPainting.image_id")
+
+
+class FacesPhoto(Base):
+    __tablename__ = "faces_photo"
+
+    face_id = Column("face_id", Integer, primary_key=True)
+    image_id = Column("image_id", Integer, ForeignKey("image_link.image_id"))
+    image = relationship("LinkImage", primaryjoin="LinkImage.image_id==FacesPhoto.image_id")

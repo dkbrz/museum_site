@@ -1,0 +1,40 @@
+<head>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+</head>
+
+{% extends 'base.html' %}
+
+{% block title %} Госкаталог {% endblock %}
+
+{% block content %}
+    <div id="search" class="search">
+        <div class="container">
+            <h2>Поиск по изображениям</h2>
+          <form action="/image_results" target="_blank" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <select name="n_results" id="n-results" class="form-control">
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                        <option value="150">150</option>
+                        <option value="200">200</option>
+                    </select>
+                    <small id="n-results-help" class="form-text text-muted">Выберите число кандидатов</small>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="file" class="form-control-file" id="file" name="file" accept="image/jpeg,image/png">
+                    <small id="image-file-help" class="form-text text-muted">Прикрепите изображение (одно лицо)</small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input id='submit-painting' class="dataform-button form-control" style="width: 100%" type="submit" name="painting" value="Искать по живописи">
+                </div>
+                <div class="form-group col-md-6">
+                    <input id='submit-photo' class="dataform-button form-control" style="width: 100%" type="submit" name="photo" value="Искать по фото">
+                </div>
+            </div>
+          </form>
+        </div>
+    </div>
+{% endblock %}

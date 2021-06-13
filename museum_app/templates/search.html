@@ -10,9 +10,9 @@
     <div id="search" class="search">
         <div class="container">
             <h2>Поиск по каталогу</h2>
-          <form action="{{prefix}}/results" target="_blank">
+          <form action="/results" target="_blank">
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     <label for="typology">Категория</label>
                     <select id="typology" name="typology" class="form-control">
                        <option>-</option>
@@ -22,15 +22,17 @@
                     </select>
                     <small id="typology-help" class="form-text text-muted">Выберите категорию экспонатов (прочерк - все)</small>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="author">Автор</label>
-                    <input id="author" name="author" class="form-control" list="author-list">
-                    <datalist id="author-list">
-                        {% for item in data["authors"] %}
-                            <option value="{{ item.order_name }}"> {{ item.order_name }}</option>
+                <div class="form-group col-md-6">
+                    <label for="techniques">Техники и материалы</label>
+                    <select id="techniques" name="techniques" class="form-control">
+                       <option>-</option>
+                        {% for item in data["techniques"] %}
+                            {% if item.name_ru %}
+                                <option value="{{ item.tech_id }}"> {{ item.name_ru | capitalize }}</option>
+                            {% endif %}
                         {% endfor %}
-                    </datalist>
-                    <small id="author-help" class="form-text text-muted">Начните вводить фамилию и выберите из вариантов</small>
+                    </select>
+                    <small id="techniques-help" class="form-text text-muted">Выберите сочетание техник и материалов (прочерк - все)</small>
                 </div>
             </div>
             <div class="form-row">
@@ -59,44 +61,64 @@
             </div>
               <h5 class="form-label">География происхождения</h5>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="country">Страна</label>
                     <select name="country" id="country" class="form-control" onchange="geoUpdate(this.value)">
                         <option value="" selected="selected">-</option>
+                        <option value="Russia">Russia</option>
+                        <option value="Soviet Union">Soviet Union</option>
+                        <option value="Russian Empire">Russian Empire</option>
+                        <option value="Ukraine">Ukraine</option>
+                        <option value="France">France</option>
+                        <option value="Germany">Germany</option>
+                        <option value="" selected="selected"><hr></option>
                         {% for item in data["geo_obj"] %}
                             <option value="{{ item }}"> {{ item }}</option>
                         {% endfor %}
                     </select>
                     <small id="country-help" class="form-text text-muted">Выберите страну (СССР, Российская империя отдельно, если нет более подробного указания) </small>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="region">Регион</label>
                     <select name="region" id="region" class="form-control">
                         <option value="" selected="selected">-</option>
                     </select>
                     <small id="region-help" class="form-text text-muted">Выберите регион, прочерк - любой</small>
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="author">Автор</label>
+                    <input id="author" name="author" class="form-control" list="author-list">
+                    <datalist id="author-list">
+                        {% for item in data["authors"] %}
+                            <option value="{{ item.order_name }}"> {{ item.order_name }}</option>
+                        {% endfor %}
+                    </datalist>
+                    <small id="author-help" class="form-text text-muted">Начните вводить фамилию и выберите из вариантов</small>
+                </div>
             </div>
             <h5 class="form-label">Текущее место хранения</h5>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="region-now">Регион</label>
-                    <select name="region_now" id="region-now" class="form-control" onchange="geoUpdate(this.value)">
+                    <select name="region_now" id="region-now" class="form-control" onchange="nowDistrictUpdate(this.value)">
                         <option value="" selected="selected">-</option>
-                        {% for item in data["geo_obj"] %}
+                        <option value="Москва">Москва</option>
+                        <option value="Санкт-Петербург (горсовет)">Санкт-Петербург</option>
+                        <option value="" selected="selected"><hr></option>
+                        {% for item in data["geo_museum"] %}
                             <option value="{{ item }}"> {{ item }}</option>
                         {% endfor %}
                     </select>
                     <small id="region-now-help" class="form-text text-muted">Выберите регион музея </small>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="district-now">Район</label>
-                    <select name="district_now" id="district-now" class="form-control">
+                    <select name="district_now" id="district-now" class="form-control" onchange="nowMuseumUpdate(this.value)">
                         <option value="" selected="selected">-</option>
                     </select>
                     <small id="district-now-help" class="form-text text-muted">Выберите район, прочерк - любой</small>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     <label for="museum-now">Музей</label>
                     <select name="museum_now" id="museum-now" class="form-control">
                         <option value="" selected="selected">-</option>
@@ -116,6 +138,7 @@
 <!--            </div>-->
             <div class="form-row">
                 <input id='submit' class="dataform-button form-control" style="width: 100%" type="submit" name="submit" value="Поиск">
+                <small id="submit-help" class="form-text text-muted">Показываются не более 100 000 результатов</small>
             </div>
           </form>
         </div>

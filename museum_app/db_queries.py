@@ -2,9 +2,12 @@ import json
 import os
 from museum_app.models import *
 
-
 geo = json.load(open(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo.json")
+))
+
+geo_museum = json.load(open(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo_museum.json")
 ))
 
 
@@ -51,12 +54,31 @@ def _geo(args, result, session):
     return result
 
 
-# def _has_image(args, result, session):
-#     image = args.get("image_only")
-#     print(image)
-#     if image:
-#         result = result.join(LinkImage)
-#     return result
+def _geo_museum(args, result, session):
+    region = args.get("region_now")
+    district = args.get("district_now")
+    museum = args.get("museum_now")
+    if not region and not district and not museum:
+        return result
+    if region:
+        geo = session.query(Museums).filter_by(nl_name_1=region)
+    if district:
+        geo = geo.filter_by(nl_name_2=district)
+    if museum:
+        geo = geo.filter_by(name=museum)
+    ids = {i.museum_copuk for i in geo.all()}
+    result = result.filter(Collection.museum_copuk.in_(ids))
+    return result
+
+
+def _techniques(args, result, session):
+    # tecnhiques = {i for i in args.getlist("techniques") if i != ""}
+    tecnhiques = args.get("techniques", type=int)
+    # print(tecnhiques)
+    if not tecnhiques:
+        return result
+    result = result.join(LinkTech).filter(LinkTech.tech_id == tecnhiques)
+    return result
 
 
 def main_search(request, session):
@@ -64,10 +86,13 @@ def main_search(request, session):
     args = request.args
     result = session.query(Collection)
 
-    for func in [_geo, _authors, _typology, _years, ]:
-        result = func(args, result, session)
-
-    # result = result.order_by(Collection.images.count())
+    for func in [_geo, _geo_museum, _authors, _typology, _years, _techniques]:
+        print(func)
+        try:
+            result = func(args, result, session)
+        except:
+            pass
+    result = result.limit(100000)
     return result
 
 
@@ -78,8 +103,13 @@ def get_search_params(session):
     ).filter(AuthorName.n >= 500).with_entities(
         AuthorName.author_id, AuthorName.order_name
     ).all()
+    techniques = session.query(
+        TechnologyName
+    ).order_by(TechnologyName.name_ru).all()
     return {
         "typology": typology,
         "authors": authors,
-        "geo_obj": geo
+        "geo_obj": geo.keys(),
+        "geo_museum": geo_museum.keys(),
+        "techniques": techniques
     }
