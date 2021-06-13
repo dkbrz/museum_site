@@ -148,7 +148,7 @@ def get_museum_map(session, museum_copuk):
     GROUP BY geo_wiki.geo_id, lat, lon, detailed, name_0, name_1, ru; 
     """, {"museum_copuk": museum_copuk}).all()
     df = pd.DataFrame(result, columns=["id", "lat", "lon", "detailed", "name_0", "name_1", "ru", "cnt"])
-    df = df[df["detailed"] != "C"]#.isin({"H", "W", "N"})]
+    # df = df[df["detailed"] != "C"]#.isin({"H", "W", "N"})]
     fig = px.scatter_mapbox(
         df, lat="lon", lon="lat", color="detailed",
         size=np.log10(df["cnt"]),
