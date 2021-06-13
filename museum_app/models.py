@@ -113,6 +113,7 @@ class Museums(Base):
     nl_name_2 = Column("nl_name_2", String)
     lon = Column("lon", Float)
     lat = Column("lat", Float)
+    cnt = Column("cnt", Integer)
 
 
 class Typology(Base):

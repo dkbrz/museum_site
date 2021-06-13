@@ -1,5 +1,10 @@
+from collections import defaultdict
 import json
 import os
+import numpy as np
+from sqlalchemy import desc
+import pandas as pd
+import plotly.express as px
 from museum_app.models import *
 
 geo = json.load(open(
@@ -9,6 +14,14 @@ geo = json.load(open(
 geo_museum = json.load(open(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo_museum.json")
 ))
+
+MAP_COLORS = {
+    "C": "red",
+    "H": "yellow",
+    "A": "orange",
+    "N": "green",
+    "W": "blue"
+}
 
 
 def _years(args, result, session):
@@ -113,3 +126,42 @@ def get_search_params(session):
         "geo_museum": geo_museum.keys(),
         "techniques": techniques
     }
+
+
+def get_museums(session):
+    museums = session.query(
+        Museums
+    ).filter(Museums.cnt > 0).order_by(Museums.nl_name_1, Museums.nl_name_2, desc(Museums.cnt)).all()
+    result = defaultdict(lambda: defaultdict(list))
+    for mus in museums:
+        result[mus.nl_name_1][mus.nl_name_2].append([mus.museum_copuk, mus.name, int(mus.cnt)])
+    return result
+
+
+def get_museum_map(session, museum_copuk):
+    museum = session.query(Museums).get(museum_copuk)
+    result = session.execute("""
+    SELECT geo_wiki.geo_id, lat, lon, detailed, name_0, name_1, ru, count(collection.id)
+    FROM collection 
+    JOIN geo_wiki ON collection.geo_id = geo_wiki.geo_id
+    WHERE collection.museum_copuk = :museum_copuk
+    GROUP BY geo_wiki.geo_id, lat, lon, detailed, name_0, name_1, ru; 
+    """, {"museum_copuk": museum_copuk}).all()
+    df = pd.DataFrame(result, columns=["id", "lat", "lon", "detailed", "name_0", "name_1", "ru", "cnt"])
+    df = df[df["detailed"] != "C"]#.isin({"H", "W", "N"})]
+    fig = px.scatter_mapbox(
+        df, lat="lon", lon="lat", color="detailed",
+        size=np.log10(df["cnt"]),
+        # size="cnt",
+        hover_data=df[["name_0", "name_1", "ru", "cnt"]],
+        size_max=25, zoom=1.5, mapbox_style="carto-darkmatter")
+    fig.update_layout(height=800)
+    # buffer = io.StringIO()
+    text = fig.to_html(full_html=True, include_plotlyjs=True)
+    # fig.write_html("this.html")
+    # html_bytes = buffer.getvalue().encode()
+    # encoded = b64encode(html_bytes).decode()
+    # buffer.seek(0)
+    # text = buffer.read()
+    # print(text[:100])
+    return text, museum #quote(encoded)

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}  {% endblock %}
+
+{% block content %}
+    <h3>{{museum.name}}</h3>
+    <h4>{{museum.nl_name_1}}, {{museum.nl_name_2}}</h4>
+<!--    <img src="data:image/jpeg;base64,{{ museum_map | safe }}">-->
+    {{ museum_map | safe }}
+{% endblock %}

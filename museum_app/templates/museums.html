@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Музеи {% endblock %}
+
+{% block content %}
+    <h3>Музеи</h3>
+    <div class="container">
+        {% for region in data %}
+            <h4> {{ region }}</h4>
+            {% for district in data[region] %}
+                <h5> {{ district }}</h5>
+                {% for museum in data[region][district] %}
+                    <a href="/museum/{{ museum[0] }}" target="_blank"> {{ museum[1] }} ({{ museum[2] }}) </a>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}

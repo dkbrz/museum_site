@@ -7,7 +7,9 @@ from sqlalchemy.orm import sessionmaker
 from museum_app.config import DB
 from museum_app.db_queries import (
     main_search,
-    get_search_params
+    get_search_params,
+    get_museums,
+    get_museum_map
 )
 from museum_app.face_search import get_image_results
 
@@ -97,6 +99,18 @@ def image_results():
 def error429(error):
     error = str(error).split(":")[-1].strip()
     return render_template("error/429.html", error=error)
+
+
+@app.route("/museums")
+def museums():
+    museum_list = get_museums(session)
+    return render_template("museums.html", data=museum_list)
+
+
+@app.route("/museum/<int:museum_copuk>")
+def museum_one(museum_copuk):
+    museum_map, museum = get_museum_map(session, museum_copuk)
+    return render_template("museum.html", museum_map=museum_map, museum=museum)
 
 
 if __name__ == "__main__":
