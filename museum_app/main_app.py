@@ -119,6 +119,16 @@ def museums_cluster():
     return render_template_string("{{ museum_map | safe }}", museum_map=museum_map)
 
 
+@app.route("/people_graph")
+def people_graph():
+    return render_template("people.html")
+
+
+@app.route("/authors")
+def authors():
+    return render_template("authors.html")
+
+
 @app.errorhandler(429)
 def error429(error):
     return render_template("error/429.html")

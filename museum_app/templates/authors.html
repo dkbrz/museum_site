@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %} Сеть авторов {% endblock %}
+{% block navbar %} {% include 'block_navbar.html' %} {% endblock %}
+
+{% block content %}
+<div class="main-div">
+    <h2>Сеть авторов</h2>
+    <div>
+        <p>С помощью информации из Викиданных можно визуализировать связи между авторами работ.</p>
+        <p>
+            <table>
+                <tr>
+                    <th>Тип связи</th>
+                    <th>Викиданные</th>
+                    <th>Цвет</th>
+                    <th>Пример</th>
+                </tr>
+                <tr>
+                    <td>Учитель-ученик</td>
+                    <td>Student, Student of, Educated at</td>
+                    <td>серый</td>
+                    <td>Nikolai Rimsky-Korsakov -> Alexander Glazunov</td>
+                </tr>
+                <tr>
+                    <td>Родители</td>
+                    <td>Mother, Father</td>
+                    <td>синий</td>
+                    <td>Alexandre Benois -> Nikolaï Alexandrovitch Benois</td>
+                </tr>
+                <tr>
+                    <td>Партнер</td>
+                    <td>Spouse, Unmarried partner</td>
+                    <td>розовый</td>
+                    <td>Leo Tolstoy + Sophia Tolstaya</td>
+                </tr>
+                <tr>
+                    <td>Братья / сестры</td>
+                    <td>Sibling</td>
+                    <td>пурпурный</td>
+                    <td>Yelena Polenova + Vasily Polenov</td>
+                </tr>
+                <tr>
+                    <td>Родственник</td>
+                    <td>Relative</td>
+                    <td>зеленый</td>
+                    <td>Erasmus Darwin + Charles Darwin</td>
+                </tr>
+                <tr>
+                    <td>Крестные родители</td>
+                    <td>Godparent</td>
+                    <td>черный</td>
+                    <td>Friedrich Engels -> Karl Liebknecht</td>
+                </tr>
+            </table>
+        </p>
+        <p>На графе показаны связи между людьми (самые крупные компоненты графа). Более темным цветом
+            выделены наиболее влиятельные по конфигурации связей вершины (топ-50 VoteRank алгоритм).
+            Цветом обозначена гендерная принадлежность.</p>
+        <p>
+            <table>
+                <tr>
+                    <th>Группа</th>
+                    <th>Цвет</th>
+                </tr>
+                <tr>
+                    <td>Женщины</td>
+                    <td>красный</td>
+                </tr>
+                <tr>
+                    <td>Мужчины</td>
+                    <td>зеленый</td>
+                </tr>
+                <tr>
+                    <td>Иное</td>
+                    <td>серый</td>
+                </tr>
+            </table>
+        </p>
+        <p>К сожалению, сеть гендерно несбалансированная, есть сильный перекос в сторону мужчин. Среди влиятельных
+            вершин только 1 женщина, остальные часто связаны социальными связями, а не связями учитель-ученик.</p>
+        <p><b>Граф довольно сложный для показа, для загрузки требуется время</b></p>
+    </div>
+</div>
+<object data="/people_graph" style="width: 100%; height: 100vh;"></object>
+
+{% endblock %}

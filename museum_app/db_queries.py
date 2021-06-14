@@ -150,7 +150,8 @@ def get_museums(session):
 def get_museum_map(session, museum_copuk):
     museum = session.query(Museums).get(museum_copuk)
     result = session.execute("""
-    SELECT geo_wiki.geo_id, lat, lon, detailed, name_0, name_1, ru, count(collection.id)
+    SELECT geo_wiki.geo_id, lat, lon, detailed, 
+    COALESCE(name_0, ""), COALESCE(name_1, ""), ru, count(collection.id)
     FROM collection 
     JOIN geo_wiki ON collection.geo_id = geo_wiki.geo_id
     WHERE collection.museum_copuk = :museum_copuk
@@ -161,7 +162,6 @@ def get_museum_map(session, museum_copuk):
         df, lat="lon", lon="lat", color="detailed",
         size=np.log10(df["cnt"]),
         hover_data=df[["name_0", "name_1", "ru", "cnt"]],
-        # category_orders=svaluesorted(df["detailed"].unique(), key=ORDER.get),
         size_max=25, zoom=1.5, mapbox_style="carto-darkmatter")
     fig.update_layout(height=850)
     text = fig.to_html(full_html=True, include_plotlyjs=True)
@@ -182,7 +182,6 @@ def get_museum_clusters(session):
         hover_data=df[["name", "lat", "lon", "nl_name_1", "nl_name_2", "cluster", "cnt"]],
         color_discrete_sequence=COLORS,
         zoom=2.8, mapbox_style="carto-darkmatter", center=Center(lat=60, lon=93))
-    # print(px.colors.qualitative.G10)
     fig.update_layout(height=900)
     text = fig.to_html(full_html=True, include_plotlyjs=True)
     return text
