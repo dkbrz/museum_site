@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% block title %} Результаты поиска {% endblock %}
 {% block content %}
-    <h2>Результаты поиска</h2>
-    <input type="checkbox" id="expand-toggle">
-    <label for="expand-toggle" id="expand-btn">Сетка / Список</label>
-	<div class="pagination-meta-block">
-        {{ pagination.info }}
-        {{ pagination.links }}
-    </div>
-    {% include 'block_results.html' %}
-	<div class="pagination-meta-block">
-        {{ pagination.links }}
-    </div>
+    <div class="main-div" style="margin-top: 0 !important;">
+        <h2>Результаты поиска</h2>
+        <input type="checkbox" id="expand-toggle">
+        <label for="expand-toggle" id="expand-btn">Сетка / Список</label>
 
-
+        <div class="pagination-meta-block">
+            {{ pagination.info }}
+            {{ pagination.links }}
+        </div>
+        {% include 'block_results.html' %}
+        <div class="pagination-meta-block">
+            {{ pagination.links }}
+        </div>
+    </div>
 {% endblock %}

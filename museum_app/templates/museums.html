@@ -1,18 +1,33 @@
 {% extends 'base.html' %}
 
 {% block title %} Музеи {% endblock %}
-
+{% block navbar %} {% include 'block_navbar.html' %} {% endblock %}
 {% block content %}
-    <h3>Музеи</h3>
-    <div class="container">
-        {% for region in data %}
-            <h4> {{ region }}</h4>
+<object id="search-results" data="/museums_cluster" style="font-size: 60px !important; width: 100%; height: 100vh;"></object>
+<div class="main-div">
+    {% for region in data %}
+        <div>
+            <h4 class="region-name"> {{ region }}</h4>
             {% for district in data[region] %}
-                <h5> {{ district }}</h5>
-                {% for museum in data[region][district] %}
-                    <a href="/museum/{{ museum[0] }}" target="_blank"> {{ museum[1] }} ({{ museum[2] }}) </a>
-                {% endfor %}
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5> {{ district }}</h5>
+                    </div>
+                    <div class="col-md-9">
+                        <table class="museum-table">
+                            {% for museumbatch in data[region][district]|batch(3) %}
+                                <tr>
+                                    {% for museum in museumbatch %}
+                                        <td style="width: 33%;"> <a href="/museum/{{ museum[0] }}" target="_blank"> {{ museum[1] }} ({{ museum[2] }}) </a></td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
             {% endfor %}
-        {% endfor %}
-    </div>
+        </div>
+        <hr style="border: 2px solid gray">
+    {% endfor %}
+</div>
 {% endblock %}

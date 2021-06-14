@@ -1,3 +1,7 @@
+.main-div {
+	margin: 50px 10%;
+}
+
 div.results div{
 	display: inline-block;
 	width: 100%;
@@ -191,4 +195,23 @@ input[type=submit] {
 
 #region-now, #district-now, #museum-now {
 	background-color: #FFFDE7;
+}
+
+.search-top {
+	display: inline-block;
+	max-width: 50%;
+	margin-right: 5%;
+}
+
+.region-name {
+	color: #C2185B;
+	margin: 20px auto 20px;
+}
+
+.museum-table {
+	margin-bottom: 20px;
+}
+
+.museum-table td {
+	padding: 5px;
 }

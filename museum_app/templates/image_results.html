@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% block title %} Результаты поиска {% endblock %}
+{% block navbar %} {% include 'block_navbar.html' %} {% endblock %}
 {% block content %}
-    <h2>Результаты поиска по {{ image_type }}</h2>
-    <input type="checkbox" id="expand-toggle">
-    <label for="expand-toggle" id="expand-btn">Сетка / Список</label>
 
-    {% include 'block_results.html' %}
+    <div class="main-div">
+        <h2>Результаты поиска по {{ image_type }}</h2>
+        <input type="checkbox" id="expand-toggle">
+        <label for="expand-toggle" id="expand-btn">Сетка / Список</label>
+        {% include 'block_results.html' %}
+    </div>
 
 {% endblock %}

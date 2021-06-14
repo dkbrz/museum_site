@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, render_template_string
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_paginate import Pagination, get_page_parameter
@@ -9,7 +9,8 @@ from museum_app.db_queries import (
     main_search,
     get_search_params,
     get_museums,
-    get_museum_map
+    get_museum_map,
+    get_museum_clusters
 )
 from museum_app.face_search import get_image_results
 
@@ -95,12 +96,6 @@ def image_results():
     return render_template("image_results.html", result=results, image_type=image_type)
 
 
-@app.errorhandler(429)
-def error429(error):
-    error = str(error).split(":")[-1].strip()
-    return render_template("error/429.html", error=error)
-
-
 @app.route("/museums")
 def museums():
     museum_list = get_museums(session)
@@ -111,6 +106,27 @@ def museums():
 def museum_one(museum_copuk):
     museum_map, museum = get_museum_map(session, museum_copuk)
     return render_template("museum.html", museum_map=museum_map, museum=museum)
+
+
+@app.route("/empty")
+def empty():
+    return ""
+
+
+@app.route("/museums_cluster")
+def museums_cluster():
+    museum_map = get_museum_clusters(session)
+    return render_template_string("{{ museum_map | safe }}", museum_map=museum_map)
+
+
+@app.errorhandler(429)
+def error429(error):
+    return render_template("error/429.html")
+
+
+@app.errorhandler(500)
+def error429(error):
+    return render_template("error/500.html")
 
 
 if __name__ == "__main__":

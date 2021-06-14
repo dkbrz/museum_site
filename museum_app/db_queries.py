@@ -5,6 +5,7 @@ import numpy as np
 from sqlalchemy import desc
 import pandas as pd
 import plotly.express as px
+from plotly.graph_objs.layout.mapbox import Center
 from museum_app.models import *
 
 geo = json.load(open(
@@ -15,13 +16,21 @@ geo_museum = json.load(open(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo_museum.json")
 ))
 
-MAP_COLORS = {
-    "C": "red",
-    "H": "yellow",
-    "A": "orange",
-    "N": "green",
-    "W": "blue"
-}
+COLORS = [
+    "#9E9E9E",  # light grey
+    "#2196F3",  # blue
+    "#9C27B0",  # purple
+    "#f44336",  # red
+    "#00BCD4",  # mint
+    "#4CAF50",  # green
+    "#FFEB3B",  # yellow
+    "#8BC34A",  # light green
+    "#FF9800",  # orange
+    "#607D8B",  # blue grey
+    "#009688",  # turquoise
+]
+
+# ORDER = dict(zip(["C", "A", "H", "W", "N", "-"], range(6)))
 
 
 def _years(args, result, session):
@@ -148,20 +157,32 @@ def get_museum_map(session, museum_copuk):
     GROUP BY geo_wiki.geo_id, lat, lon, detailed, name_0, name_1, ru; 
     """, {"museum_copuk": museum_copuk}).all()
     df = pd.DataFrame(result, columns=["id", "lat", "lon", "detailed", "name_0", "name_1", "ru", "cnt"])
-    # df = df[df["detailed"] != "C"]#.isin({"H", "W", "N"})]
     fig = px.scatter_mapbox(
         df, lat="lon", lon="lat", color="detailed",
         size=np.log10(df["cnt"]),
-        # size="cnt",
         hover_data=df[["name_0", "name_1", "ru", "cnt"]],
+        # category_orders=svaluesorted(df["detailed"].unique(), key=ORDER.get),
         size_max=25, zoom=1.5, mapbox_style="carto-darkmatter")
-    fig.update_layout(height=800)
-    # buffer = io.StringIO()
+    fig.update_layout(height=850)
     text = fig.to_html(full_html=True, include_plotlyjs=True)
-    # fig.write_html("this.html")
-    # html_bytes = buffer.getvalue().encode()
-    # encoded = b64encode(html_bytes).decode()
-    # buffer.seek(0)
-    # text = buffer.read()
-    # print(text[:100])
-    return text, museum #quote(encoded)
+    return text, museum
+
+
+def get_museum_clusters(session):
+    result = session.execute("""
+        SELECT museum_copuk, name, lat, lon, nl_name_1, nl_name_2, cluster, cnt FROM museums;
+        """).all()
+    df = pd.DataFrame(
+        result,
+        columns=["museum_copuk", "name", "lat", "lon", "nl_name_1", "nl_name_2", "cluster", "cnt"])
+    df = df.sort_values(by="cluster")
+    df["cluster"] = df["cluster"].fillna(-1).apply(lambda x: str(int(x)) if x > 0 else "мало данных")
+    fig = px.scatter_mapbox(
+        df, lat="lat", lon="lon", color="cluster",
+        hover_data=df[["name", "lat", "lon", "nl_name_1", "nl_name_2", "cluster", "cnt"]],
+        color_discrete_sequence=COLORS,
+        zoom=2.8, mapbox_style="carto-darkmatter", center=Center(lat=60, lon=93))
+    # print(px.colors.qualitative.G10)
+    fig.update_layout(height=900)
+    text = fig.to_html(full_html=True, include_plotlyjs=True)
+    return text

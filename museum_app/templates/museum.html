@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
-
 {% block title %}  {% endblock %}
-
+{% block navbar %} {% include 'block_navbar.html' %} {% endblock %}
 {% block content %}
-    <h3>{{museum.name}}</h3>
-    <h4>{{museum.nl_name_1}}, {{museum.nl_name_2}}</h4>
-<!--    <img src="data:image/jpeg;base64,{{ museum_map | safe }}">-->
+<div class="main-div" style="margin: 20px 10% 0">
+    <div>
+        <h3>{{museum.name}} [{{museum.nl_name_1}}, {{museum.nl_name_2}}]</h3>
+    </div>
+</div>
+<embed>
     {{ museum_map | safe }}
+</embed>
+
 {% endblock %}

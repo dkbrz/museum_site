@@ -16,13 +16,13 @@ function setYear(century) {
 
 function updateOptions(name, to_id, data_obj, mode) {
     let topicSel = document.getElementById(to_id);
-    console.log(name);
+    // console.log(name);
     topicSel.length = 1;
-    console.log(data_obj[name]);
+    // console.log(data_obj[name]);
     if (mode === 1){
         var z = data_obj[name];
         for (var i = 0; i < z.length; i++) {
-            console.log(z[i]);
+            // console.log(z[i]);
             topicSel.options[topicSel.options.length] = new Option(z[i], z[i]);
         }
     } else {
@@ -45,4 +45,16 @@ function nowDistrictUpdate(name) {
 function nowMuseumUpdate(name) {
     let regionName = document.getElementById("region-now").value;
     updateOptions(name, "museum-now", geo_museum[regionName], mode=1)
+}
+
+function forceSearch(from, to, page){
+    let form = document.getElementById(from);
+
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      let formData = new FormData(form);
+      let params = new URLSearchParams(formData);
+      console.log(params.toString());
+      document.getElementById(to).data = "/" + page + "?" + params.toString();
+    });
 }
