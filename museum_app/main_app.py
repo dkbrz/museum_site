@@ -14,7 +14,7 @@ from museum_app.db_queries import (
 )
 from museum_app.face_search import get_image_results
 
-PER_PAGE = 100
+PER_PAGE = 50
 
 engine = create_engine(DB, pool_pre_ping=True)
 Session = sessionmaker(bind=engine)

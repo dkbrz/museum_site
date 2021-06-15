@@ -37,7 +37,6 @@ def _years(args, result, session):
     if args.get("min_year") or args.get("max_year"):
         min_year = args.get("min_year", type=int, default=None)
         max_year = args.get("max_year", type=int, default=None)
-        print(min_year, max_year)
         if min_year:
             result = result.filter(Collection.start_year >= min_year)
         if max_year:
@@ -71,7 +70,6 @@ def _geo(args, result, session):
     if name_1:
         geo = geo.filter_by(name_1=name_1)
     geo_ids = {i.geo_id for i in geo.all()}
-    # print(geo_ids)
     result = result.filter(Collection.geo_id.in_(geo_ids))
     return result
 
@@ -94,9 +92,7 @@ def _geo_museum(args, result, session):
 
 
 def _techniques(args, result, session):
-    # tecnhiques = {i for i in args.getlist("techniques") if i != ""}
     tecnhiques = args.get("techniques", type=int)
-    # print(tecnhiques)
     if not tecnhiques:
         return result
     result = result.join(LinkTech).filter(LinkTech.tech_id == tecnhiques)
@@ -104,12 +100,10 @@ def _techniques(args, result, session):
 
 
 def main_search(request, session):
-    # result = session.query(Collection)#.filter(Collection.id < 100).limit(10)
     args = request.args
     result = session.query(Collection)
 
     for func in [_geo, _geo_museum, _authors, _typology, _years, _techniques]:
-        print(func)
         try:
             result = func(args, result, session)
         except:
