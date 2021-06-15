@@ -56,7 +56,6 @@ div.results div{
 
 #expand-toggle:checked ~ * .exhibit-item {
 	max-width: 100% !important;
-	/*display: block;*/
 }
 
 #expand-toggle:checked ~ * .photo-wrapper {
@@ -218,4 +217,9 @@ input[type=submit] {
 
 .card {
 	margin: 50px auto;
+}
+
+.gray-text{
+	margin-left: 30px;
+	/*display: none;*/
 }
