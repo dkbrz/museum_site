@@ -8,13 +8,13 @@ import plotly.express as px
 from plotly.graph_objs.layout.mapbox import Center
 from museum_app.models import *
 
-geo = json.load(open(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo.json")
-))
+geo = json.loads(open(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo.json"), encoding="utf-8"
+).read())
 
-geo_museum = json.load(open(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo_museum.json")
-))
+geo_museum = json.loads(open(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/geo_museum.json"), encoding="utf-8"
+).read())
 
 COLORS = [
     "#9E9E9E",  # light grey
