@@ -215,3 +215,7 @@ input[type=submit] {
 .museum-table td {
 	padding: 5px;
 }
+
+.card {
+	margin: 50px auto;
+}

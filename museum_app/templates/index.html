@@ -3,6 +3,46 @@
 {% block navbar %} {% include 'block_navbar.html' %} {% endblock %}
 {% block content %}
 <div class="main-div">
-    <h2>Автоматическая обработка данных Госкаталога</h2>
+    <h2 class="text-center">Результаты автоматической обработка данных Госкаталога</h2>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card text-center">
+          <div class="card-body">
+            <h3 class="card-title">Поиск по коллекции</h3>
+            <p class="card-text">Поиск по коллекциям музее с использованием фильтров по обработанным данным</p>
+            <a href="/search" class="btn btn-warning" target="_blank">Смотреть коллекцию</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card text-center">
+          <div class="card-body">
+            <h3 class="card-title">Поиск по лицам</h3>
+            <p class="card-text">Поиск похожих лиц по портрету</p>
+            <a href="/image_search" class="btn btn-warning" target="_blank">Искать по лицам</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card text-center">
+          <div class="card-body">
+            <h3 class="card-title">География музейных коллекций</h3>
+            <p class="card-text">Карта музеев России и карты географии экспонатов для каждого музея</p>
+            <a href="/museums" class="btn btn-warning" target="_blank">Перейти к картам</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card text-center">
+          <div class="card-body">
+            <h3 class="card-title">Сеть авторов</h3>
+            <p class="card-text">Основная часть графа связей между авторами по данным Wikidata</p>
+            <a href="/authors" class="btn btn-warning" target="_blank">Смотреть граф</a>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 {% endblock %}
