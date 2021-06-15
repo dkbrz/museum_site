@@ -18,7 +18,7 @@ PER_PAGE = 100
 
 engine = create_engine(DB, pool_pre_ping=True)
 Session = sessionmaker(bind=engine)
-session = Session()
+# session = Session()
 
 
 def create_app():
@@ -44,7 +44,8 @@ def index():
 
 @app.route("/search")
 def search():
-    data = get_search_params(session)
+    with Session() as session:
+        data = get_search_params(session)
     return render_template("search.html", data=data)
 
 
@@ -53,7 +54,8 @@ def result():
     if request.args:
         page = request.args.get(get_page_parameter(), type=int, default=1)
         offset = (page - 1) * PER_PAGE
-        result = main_search(request, session)
+        with Session() as session:
+            result = main_search(request, session)
         number = result.count()
         pagination = Pagination(
             page=page, per_page=PER_PAGE, total=number,
@@ -89,7 +91,8 @@ def image_results():
             which = "photo"
         n_candidates = request.form.get("n_results", type=int, default=50)
         input_file = request.files["file"]
-        results = get_image_results(input_file, session, n=n_candidates, which=which)
+        with Session() as session:
+            results = get_image_results(input_file, session, n=n_candidates, which=which)
     else:
         results = []
         image_type = "..."
@@ -98,13 +101,15 @@ def image_results():
 
 @app.route("/museums")
 def museums():
-    museum_list = get_museums(session)
+    with Session() as session:
+        museum_list = get_museums(session)
     return render_template("museums.html", data=museum_list)
 
 
 @app.route("/museum/<int:museum_copuk>")
 def museum_one(museum_copuk):
-    museum_map, museum = get_museum_map(session, museum_copuk)
+    with Session() as session:
+        museum_map, museum = get_museum_map(session, museum_copuk)
     return render_template("museum.html", museum_map=museum_map, museum=museum)
 
 
@@ -115,7 +120,8 @@ def empty():
 
 @app.route("/museums_cluster")
 def museums_cluster():
-    museum_map = get_museum_clusters(session)
+    with Session() as session:
+        museum_map = get_museum_clusters(session)
     return render_template_string("{{ museum_map | safe }}", museum_map=museum_map)
 
 
