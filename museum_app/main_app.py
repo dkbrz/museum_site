@@ -93,10 +93,12 @@ def image_results():
         input_file = request.files["file"]
         with Session() as session:
             results = get_image_results(input_file, session, n=n_candidates, which=which)
+            return render_template("image_results.html", result=results, image_type=image_type)
     else:
         results = []
         image_type = "..."
-    return render_template("image_results.html", result=results, image_type=image_type)
+        return render_template("image_results.html", result=results, image_type=image_type)
+
 
 
 @app.route("/museums")
